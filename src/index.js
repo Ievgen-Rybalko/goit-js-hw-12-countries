@@ -15,33 +15,44 @@ const refs = getRefs();
 
 refs.searchQuery.addEventListener('input', debounce(onInput, 500));
 function onInput(evt) {
+    //console.log('evt',evt);
+    //console.log('evt.target.value', evt.target.value);
     const searchQueryValue = evt.target.value;  //;form.elements.query.value
-    //console.log(searchQueryValue);
+    
     refs.countryContainer.innerHTML = ''; //clear the markup
-    API.fetchCountries(searchQueryValue)
+    
+    if (inputIsValid(searchQueryValue)) {
+        API.fetchCountries(searchQueryValue)
         .then(data => {
+                
+                console.log("data", data);
+                console.log('data.length === 1', data.length === 1);
+                if (data.length === 1) {
+                    
+                    const countryMarkup = createCardMarkup(data);
+                    refs.countryContainer.insertAdjacentHTML('beforeend', countryMarkup);
+                    refs.searchQuery.value = '';
+                    return;
+                }
 
-            if (data.status === 404) {
-                pNotyfyMassage('Nothing was found for your query!')
-            }
-            else if (data.length === 1) {
-              //console.log('data1:', data);
-                const countryMarkup = createCardMarkup(data);
-                refs.countryContainer.insertAdjacentHTML('beforeend', countryMarkup);
-                refs.searchQuery.value = '';
-            }
-            else if (1 < data.length < 10) {
-              //console.log('data10:', data);
-                const contryDropListMarkup = createCountryDropList(data);
-                refs.countryContainer.insertAdjacentHTML('beforeend', contryDropListMarkup);
-            }
-            else if (data.length > 10) {
-                pNotyfyMassage('Too many matches found. Please enter more specific query!');
-            }  
- 
-        }).catch(onError)
-        .finally(() => refs.searchQuery = '');
-};
+                else if ((1 < data.length) && (data.length < 10)) {
+                    
+                    const contryDropListMarkup = createCountryDropList(data);
+                    refs.countryContainer.insertAdjacentHTML('beforeend', contryDropListMarkup);
+                    return;
+                }
+
+                else if (data.length > 10) {
+                    error({
+                        title: 'Too many matches found. Please enter more specific query!',
+                        delay: 1500,
+                    });
+                }
+                
+        }).catch(onError);    
+        
+    };  
+}
 
 function createCountryDropList(data) {
   return templateCountryList(data);  
@@ -49,17 +60,36 @@ function createCountryDropList(data) {
 
 
 function createCardMarkup(data) {
-    return templateCountryCard(data);
+  return templateCountryCard(data);
 }
 
 
-function onError(error) {
-    pNotyfyMassage(error);
-};
-
-function pNotyfyMassage(message) {
+function onError(err) {
     error ({
-            title: `${message}`,
-            delay: 2000,
+        title: `${err}`,
+        delay: 1500,
         });
+}
+
+
+//чтобы совсем очевидный непотреб не уходил на сервер:
+function inputIsValid(input) {
+    if (input === '') {
+        return false;
+    }
+    //только буквы
+    for (let j = 0; j < input.length; j += 1) {
+        const i = input.charCodeAt(j);
+        
+        if ((i < 65)
+            || ((i > 91) && (i < 97))
+            || (i > 122)) {
+            error({
+                title: `Bad input:"${input}". Use letters only`,
+                delay: 1500,
+            })
+            return false;
+        }
+    }
+    return true; 
 }

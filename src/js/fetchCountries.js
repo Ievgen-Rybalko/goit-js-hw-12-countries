@@ -1,12 +1,12 @@
-function fetchCountries(searchQuery) {
-    const url = `https://restcountries.eu/rest/v2/name/${searchQuery}`;
+function fetchCountries(name) {
+    const url = `https://restcountries.eu/rest/v2/name/${name}`;
 
     return fetch(url)
-        .then(resolve => { return resolve.json() })
-  //{}
-        .catch(error => {
-            console.log('Error occurred:', error)
+        .then(responce => {
+            if (responce.status === 200) { return responce.json(); }
+            throw new Error('Error: data not delivered');
         });
+   
 }
 
 export default { fetchCountries };
