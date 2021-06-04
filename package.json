@@ -1,24 +1,24 @@
 {
-  "name": "goit-js-hw-10-food-service",
+  "name": "goit-js-hw-12-countries",
   "version": "1.1.0",
   "description": "",
   "main": "index.js",
-  "homepage": "https://Ievgen-Rybalko.github.io/goit-js-hw-10-food-service",
+  "homepage": "https://Ievgen-Rybalko.github.io/goit-js-hw-12-countries",
   "scripts": {
     "dev": "parcel src/*.html --no-source-maps",
-    "build": "parcel build src/*.html --no-source-maps --public-url /goit-js-hw-10-food-service/",
+    "build": "parcel build src/*.html --no-source-maps --public-url /goit-js-hw-12-countries/",
     "deploy": "gh-pages -d dist",
     "predeploy": "npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Ievgen-Rybalko/goit-js-hw-10-food-service.git"
+    "url": "git+https://github.com/Ievgen-Rybalko/goit-js-hw-12-countries.git"
   },
   "keywords": [],
   "author": "Ievgen Rybalko <jackrjack1@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Ievgen-Rybalko/goit-js-hw-10-food-service/issues"
+    "url": "https://github.com/Ievgen-Rybalko/goit-js-hw-12-countries/issues"
   },
   "devDependencies": {
     "@pnotify/core": "^5.2.0",
